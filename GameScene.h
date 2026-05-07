@@ -9,8 +9,6 @@ public:
 	void Draw();
 	~Game();
 
-	Model2* model2_ = nullptr;
-
 	// ワールドトランスフォーム
 	KamataEngine::WorldTransform worldTransform_;
 
