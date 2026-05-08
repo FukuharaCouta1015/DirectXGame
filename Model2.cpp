@@ -131,6 +131,7 @@ Model2* Model2::CreateSphere(uint32_t divisionVertial, uint32_t divisionHorizont
 	return instance;
 }
 
+#pragma region 1枚目
 Model2* Model2::CreateSquare() {
 
 	// メモリ確保
@@ -138,27 +139,27 @@ Model2* Model2::CreateSquare() {
 	std::vector<Mesh::VertexPosNormalUv> vertices;
 	std::vector<uint32_t> indices;
 	// 頂点数
-	const uint32_t kNumVertices = 4;
+	const uint32_t kNumVertices = 8;
 	// インデックス数
-	const uint32_t kNumIndices = 6;
+	const uint32_t kNumIndices = 12;
 
 	vertices.resize(kNumVertices);
 	indices.resize(kNumIndices);
 
 	// 左下
-	vertices[0].pos = {0.0f, 360.0f, 0.0f};
+	vertices[0].pos = {-30.0f, -10.0f, 0.0f};
 	vertices[0].uv = {0.0f, 1.0f};
 	vertices[0].normal = {0.0f, 0.0f, -1.0f};
 	// 左上
-	vertices[1].pos = {0.0f, 0.0f, 0.0f};
+	vertices[1].pos = {-30.0f, 10.0f, 0.0f};
 	vertices[1].uv = {0.0f, 0.0f};
 	vertices[1].normal = {0.0f, 0.0f, -1.0f};
 	// 右下
-	vertices[2].pos = {640.0f, 360.0f, 0.0f};
+	vertices[2].pos = {-10.0f, -10.0f, 0.0f};
 	vertices[2].uv = {1.0f, 1.0f};
 	vertices[2].normal = {0.0f, 0.0f, -1.0f};
 	// 右上
-	vertices[3].pos = {640.0f, 0.0f, 0.0f};
+	vertices[3].pos = {-10.0f, 10.0f, 0.0f};
 	vertices[3].uv = {1.0f, 0.0f};
 	vertices[3].normal = {0.0f, 0.0f, -1.0f};
 
@@ -173,6 +174,97 @@ Model2* Model2::CreateSquare() {
 
 	return instance;
 }
+#pragma endregion
+
+#pragma region 2枚目
+Model2* Model2::CreateSquare2() {
+
+	// メモリ確保
+	Model2* instance2 = new Model2;
+	std::vector<Mesh::VertexPosNormalUv> vertices2;
+	std::vector<uint32_t> indices2;
+	// 頂点数
+	const uint32_t kNumVertices2 = 8;
+	// インデックス数
+	const uint32_t kNumIndices2 = 12;
+
+	vertices2.resize(kNumVertices2);
+	indices2.resize(kNumIndices2);
+
+	// 左下
+	vertices2[0].pos = {10.0f, 0.0f, 0.0f};
+	vertices2[0].uv = {0.0f, 1.0f};
+	vertices2[0].normal = {0.0f, 0.0f, -1.0f};
+	// 左上
+	vertices2[1].pos = {10.0f, 20.0f, 0.0f};
+	vertices2[1].uv = {0.0f, 0.0f};
+	vertices2[1].normal = {0.0f, 0.0f, -1.0f};
+	// 右下
+	vertices2[2].pos = {30.0f, 0.0f, 0.0f};
+	vertices2[2].uv = {1.0f, 1.0f};
+	vertices2[2].normal = {0.0f, 0.0f, -1.0f};
+	// 右上
+	vertices2[3].pos = {30.0f, 20.0f, 0.0f};
+	vertices2[3].uv = {1.0f, 0.0f};
+	vertices2[3].normal = {0.0f, 0.0f, -1.0f};
+
+	indices2[0] = 0;
+	indices2[1] = 1;
+	indices2[2] = 2;
+	indices2[3] = 1;
+	indices2[4] = 3;
+	indices2[5] = 2;
+
+	instance2->InitializeFromVertices(vertices2, indices2);
+
+	return instance2;
+}
+#pragma endregion
+
+#pragma region 3枚目
+Model2* Model2::CreateSquare3() {
+
+	// メモリ確保
+	Model2* instance3 = new Model2;
+	std::vector<Mesh::VertexPosNormalUv> vertices3;
+	std::vector<uint32_t> indices3;
+	// 頂点数
+	const uint32_t kNumvertices3 = 8;
+	// インデックス数
+	const uint32_t kNumIndices3 = 12;
+
+	vertices3.resize(kNumvertices3);
+	indices3.resize(kNumIndices3);
+
+	// 左下
+	vertices3[0].pos = {10.0f, -20.0f, 0.0f};
+	vertices3[0].uv = {0.0f, 1.0f};
+	vertices3[0].normal = {0.0f, 0.0f, -1.0f};
+	// 左上
+	vertices3[1].pos = {10.0f, 0.0f, 0.0f};
+	vertices3[1].uv = {0.0f, 0.0f};
+	vertices3[1].normal = {0.0f, 0.0f, -1.0f};
+	// 右下
+	vertices3[2].pos = {30.0f, -20.0f, 0.0f};
+	vertices3[2].uv = {1.0f, 1.0f};
+	vertices3[2].normal = {0.0f, 0.0f, -1.0f};
+	// 右上
+	vertices3[3].pos = {30.0f, 0.0f, 0.0f};
+	vertices3[3].uv = {1.0f, 0.0f};
+	vertices3[3].normal = {0.0f, 0.0f, -1.0f};
+
+	indices3[0] = 0;
+	indices3[1] = 1;
+	indices3[2] = 2;
+	indices3[3] = 1;
+	indices3[4] = 3;
+	indices3[5] = 2;
+
+	instance3->InitializeFromVertices(vertices3, indices3);
+
+	return instance3;
+}
+#pragma endregion
 
 void Model2::PreDraw(ID3D12GraphicsCommandList* commandList) { ModelCommon2::GetInstance()->PreDraw(commandList); }
 

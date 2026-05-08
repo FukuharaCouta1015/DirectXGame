@@ -9,7 +9,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	// エンジンの初期化
 	KamataEngine::Initialize(L"LE3D_21_フクハラ_コウタ");
 
-	// DirectXCommonインスタンスを取得する
+	// DirectXCommonインスタンスを取得す
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
 	// ゲームのインスタンス生成

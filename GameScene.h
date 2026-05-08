@@ -16,7 +16,13 @@ public:
 	KamataEngine::Camera camera_;
 
 	// 3Dモデルデータ
-	KamataEngine::Model* model_ = nullptr;
+	// KamataEngine::Model* model_ = nullptr;
+
+	KamataEngine::Model2* model2_ = nullptr;
+
+	KamataEngine::Model2* model2_2_ = nullptr;
+
+	KamataEngine::Model2* model2_3_ = nullptr;
 
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0;
