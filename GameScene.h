@@ -61,7 +61,7 @@ private:
 
 	// パーティクル3Dモデルデータ
 	KamataEngine::Model* modelParticle_ = nullptr;
-	// std::list<Particle*> particles_;
+	std::list<Particle*> particles_;
 
 	uint32_t OFF_Particle = true;
 	uint32_t ON_Particle = false;

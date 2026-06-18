@@ -47,16 +47,13 @@ void Game::Initialize() {
 
 	modelParticle_ = KamataEngine::Model::CreateSphere(4, 4);
 
-	particle_ = new Particle();
-	KamataEngine::Vector3 P_position = {0.0f, 0.0f, 0.0f};
-	particle_->Initialize(modelParticle_, P_position);
-	/*
-	for (int i = 0; i < 150; i++)
-	{
-
-	    //リストに追加
-	    particles_.push_back(particle_);
-	}*/
+	for (int i = 0; i < 150; i++) {
+		particle_ = new Particle();
+		KamataEngine::Vector3 P_position = {0.5f * i, 0.0f, 0.0f};
+		particle_->Initialize(modelParticle_, P_position);
+		// リストに追加
+		particles_.push_back(particle_);
+	}
 
 #pragma endregion
 
@@ -120,12 +117,9 @@ void Game::Update() {
 
 #pragma endregion
 
-	/*
-	for (Particle* particle : particles_)
-	{
-	    particle->Update();
-	}*/
-	particle_->Update();
+	for (Particle* particle : particles_) {
+		particle->Update();
+	}
 }
 
 void Game::Draw() {
@@ -155,12 +149,10 @@ void Game::Draw() {
 	}
 	if (ON_Particle) {
 	}
-	/*
-	for (Particle* particle : particles_)
-	{
-	    particle->Draw(camera_);
-	}*/
-	particle_->Draw(camera_);
+
+	for (Particle* particle : particles_) {
+		particle->Draw(camera_);
+	}
 
 #pragma endregion
 
@@ -212,13 +204,11 @@ Game::~Game() {
 	// パーティクルの解放
 	delete modelParticle_;
 	delete particle_;
-	/*
-	for (Particle* particle : particles_)
-	{
-	    delete particle;
+
+	for (Particle* particle : particles_) {
+		delete particle;
 	}
 	particles_.clear();
-*/
 
 	Model2::StaticFinalize();
 }
