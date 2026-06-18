@@ -1,7 +1,6 @@
 #pragma once
-#include "Model2.h"
 #include "KamataEngine.h"
-
+#include "Model2.h"
 
 class Effect {
 public:

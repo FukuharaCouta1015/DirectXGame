@@ -5,6 +5,10 @@
 
 #include <list>
 
+#include "Particle.h"
+
+using namespace KamataEngine;
+
 class Game {
 public:
 	void Initialize();
@@ -29,6 +33,9 @@ public:
 	// エフェクト生成
 	void EffectBorn(KamataEngine::Vector3 position);
 
+	// パーティクル
+	Particle* particle_ = nullptr;
+
 	// デバッグカメラ
 	bool isDebugCameraActive_ = false;
 	KamataEngine::DebugCamera* debugCamera_ = nullptr;
@@ -41,7 +48,21 @@ private:
 	// カメラ
 	KamataEngine::Camera camera_;
 
+#pragma region エフェクト
+
 	KamataEngine::Model* modelEffect_ = nullptr;
 	// エフェクト一覧
 	std::list<Effect*> effects_;
+
+	uint32_t OFF_Effect = true;
+	uint32_t ON_Effect = false;
+
+#pragma endregion
+
+	// パーティクル3Dモデルデータ
+	KamataEngine::Model* modelParticle_ = nullptr;
+	// std::list<Particle*> particles_;
+
+	uint32_t OFF_Particle = true;
+	uint32_t ON_Particle = false;
 };

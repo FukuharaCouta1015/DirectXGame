@@ -7,7 +7,7 @@ using namespace KamataEngine;
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	// エンジンの初期化
-	KamataEngine::Initialize(L"LE3D_21_フクハラ_コウタ");
+	KamataEngine::Initialize(L"LE3D_21_フクハラコウタ");
 
 	// DirectXCommonインスタンスを取得する
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();

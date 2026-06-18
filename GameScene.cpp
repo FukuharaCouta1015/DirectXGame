@@ -43,6 +43,23 @@ void Game::Initialize() {
 
 #pragma endregion
 
+#pragma region パーティクル
+
+	modelParticle_ = KamataEngine::Model::CreateSphere(4, 4);
+
+	particle_ = new Particle();
+	KamataEngine::Vector3 P_position = {0.0f, 0.0f, 0.0f};
+	particle_->Initialize(modelParticle_, P_position);
+	/*
+	for (int i = 0; i < 150; i++)
+	{
+
+	    //リストに追加
+	    particles_.push_back(particle_);
+	}*/
+
+#pragma endregion
+
 #pragma region テクスチャ
 
 	// textureHandle_ = TextureManager::Load("uvChecker.png");
@@ -77,6 +94,8 @@ void Game::Update() {
 	}
 #pragma endregion
 
+#pragma region エフェクト
+
 	// エフェクト発生
 	if (rand() % 5 == 0) {
 		Vector3 position = {distribution(randomEngine), distribution(randomEngine), 0};
@@ -98,18 +117,52 @@ void Game::Update() {
 		}
 		return false;
 	});
+
+#pragma endregion
+
+	/*
+	for (Particle* particle : particles_)
+	{
+	    particle->Update();
+	}*/
+	particle_->Update();
 }
 
 void Game::Draw() {
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 
 	Model::PreDraw();
-	// model_HitEffect_->Draw(worldTransform_, camera_, textureHandle_);
 
-	// エフェクト描画
-	for (Effect* effect : effects_) {
-		effect->Draw(camera_);
+#pragma region エフェクト描画
+
+	if (Input::GetInstance()->TriggerKey(DIK_E)) {
+		ON_Effect = (ON_Effect == false);
+		OFF_Effect = (ON_Effect == false);
 	}
+	if (ON_Effect) {
+		// エフェクト描画
+		for (Effect* effect : effects_) {
+			effect->Draw(camera_);
+		}
+	}
+
+#pragma endregion
+
+#pragma region パーティクルの描画
+	if (Input::GetInstance()->TriggerKey(DIK_P)) {
+		ON_Particle = (ON_Particle == false);
+		OFF_Particle = (ON_Particle == false);
+	}
+	if (ON_Particle) {
+	}
+	/*
+	for (Particle* particle : particles_)
+	{
+	    particle->Draw(camera_);
+	}*/
+	particle_->Draw(camera_);
+
+#pragma endregion
 
 	Model::PostDraw();
 
@@ -126,6 +179,7 @@ void Game::Draw() {
 	Model2::PostDraw();
 }
 
+#pragma region エフェクト発生
 // エフェクト発生
 void Game::EffectBorn(Vector3 position) {
 	Vector3 color = {abs(distribution(randomEngine)), abs(distribution(randomEngine)), abs(distribution(randomEngine))};
@@ -138,18 +192,33 @@ void Game::EffectBorn(Vector3 position) {
 	}
 }
 
+#pragma endregion
+
 Game::~Game() {
 	delete debugCamera_;
 
 	// delete model_;
 	delete model2_;
 
+#pragma region エフェクトの解放
 	// エフェクト
 	for (Effect* effect : effects_) {
 		delete effect;
 	}
 	effects_.clear();
 	delete modelEffect_;
+#pragma endregion
+
+	// パーティクルの解放
+	delete modelParticle_;
+	delete particle_;
+	/*
+	for (Particle* particle : particles_)
+	{
+	    delete particle;
+	}
+	particles_.clear();
+*/
 
 	Model2::StaticFinalize();
 }
