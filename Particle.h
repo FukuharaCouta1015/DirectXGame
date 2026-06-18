@@ -19,4 +19,5 @@ private:
 	KamataEngine::Model* model_ = nullptr;
 
 	uint32_t MOVE_Particle = false;
+
 };
