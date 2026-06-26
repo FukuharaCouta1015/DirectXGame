@@ -1,5 +1,5 @@
 #include "Particle.h"
-
+#include <cassert>
 using namespace MathUtility;
 
 void Particle::Initialize(KamataEngine::Model* model, KamataEngine::Vector3 position) {
