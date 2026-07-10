@@ -39,7 +39,7 @@ void Game::Initialize() {
 
 	// 最初のエフェクト生成
 	KamataEngine::Vector3 position = {0.0f, 0.0f, 0.0f};
-	EffectBorn(position);
+//	EffectBorn(position);
 
 #pragma endregion
 
@@ -49,8 +49,14 @@ void Game::Initialize() {
 
 	for (int i = 0; i < 150; i++) {
 		particle_ = new Particle();
-		KamataEngine::Vector3 P_position = {0.5f * i, 0.0f, 0.0f};
-		particle_->Initialize(modelParticle_, P_position);
+		KamataEngine::Vector3 P_position = {0.0f * i, 0.0f, 0.0f};
+		KamataEngine::Vector3 P_velocity = {distribution(randomEngine), distribution(randomEngine), 0};
+
+		Normalize(P_velocity);
+		P_velocity *= distribution(randomEngine);
+		P_velocity *= 0.1f;
+
+		particle_->Initialize(modelParticle_, P_position, P_velocity);
 		// リストに追加
 		particles_.push_back(particle_);
 	}
@@ -194,21 +200,23 @@ Game::~Game() {
 
 #pragma region エフェクトの解放
 	// エフェクト
-	for (Effect* effect : effects_) {
-		delete effect;
-	}
-	effects_.clear();
-	delete modelEffect_;
+//	for (Effect* effect : effects_) {
+//		delete effect;
+//	}
+//	effects_.clear();
+//	delete modelEffect_;
 #pragma endregion
 
 	// パーティクルの解放
 	delete modelParticle_;
-	delete particle_;
+//	delete particle_;
 
 	for (Particle* particle : particles_) {
 		delete particle;
 	}
 	particles_.clear();
+
+	particle_ = nullptr; 
 
 	Model2::StaticFinalize();
 }

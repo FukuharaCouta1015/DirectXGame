@@ -1,15 +1,21 @@
 #include "Particle.h"
+
 #include <cassert>
+
 using namespace MathUtility;
 
-void Particle::Initialize(KamataEngine::Model* model, KamataEngine::Vector3 position) {
+void Particle::Initialize(KamataEngine::Model* model, KamataEngine::Vector3 position, KamataEngine::Vector3 velocity) {
 	assert(model);
 
 	model_ = model;
 
+	velocity_ = velocity;
+
 	worldTransform_.Initialize();
 
 	worldTransform_.translation_ = position;
+
+	worldTransform_.scale_ = {0.2f, 0.2f, 0.2f};
 
 	// 色の設定
 	objectColor_.Initialize();
@@ -28,7 +34,7 @@ void Particle::Update() {
 	if (MOVE_Particle) {
 	}
 	// 移動
-	worldTransform_.translation_ += {0.0f, 0.1f, 0.0f};
+	worldTransform_.translation_ += velocity_;
 
 	// 行列の更新
 	worldTransform_.UpdateMatrix();
