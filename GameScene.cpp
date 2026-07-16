@@ -45,21 +45,8 @@ void Game::Initialize() {
 
 #pragma region パーティクル
 
-	modelParticle_ = KamataEngine::Model::CreateSphere(4, 4);
-
-	for (int i = 0; i < 150; i++) {
-		particle_ = new Particle();
-		KamataEngine::Vector3 P_position = {0.0f * i, 0.0f, 0.0f};
-		KamataEngine::Vector3 P_velocity = {distribution(randomEngine), distribution(randomEngine), 0};
-
-		Normalize(P_velocity);
-		P_velocity *= distribution(randomEngine);
-		P_velocity *= 0.1f;
-
-		particle_->Initialize(modelParticle_, P_position, P_velocity);
-		// リストに追加
-		particles_.push_back(particle_);
-	}
+	// 乱数の初期化
+	srand((unsigned)time(NULL));
 
 #pragma endregion
 
@@ -123,6 +110,13 @@ void Game::Update() {
 
 #pragma endregion
 
+#pragma region パーティクル
+
+	if (rand() % 20 == 0) {
+		KamataEngine::Vector3 P_position = {distribution(randomEngine) * 30.0f, distribution(randomEngine) * 20.0f, 0};
+		ParticleBorn(P_position);
+	}
+
 	for (Particle* particle : particles_) {
 		particle->Update();
 	}
@@ -134,6 +128,8 @@ void Game::Update() {
 		}
 		return false;
 	});
+
+#pragma endregion
 }
 
 void Game::Draw() {
@@ -185,7 +181,6 @@ void Game::Draw() {
 	Model2::PostDraw();
 }
 
-#pragma region エフェクト発生
 // エフェクト発生
 void Game::EffectBorn(Vector3 position) {
 	Vector3 color = {abs(distribution(randomEngine)), abs(distribution(randomEngine)), abs(distribution(randomEngine))};
@@ -198,7 +193,25 @@ void Game::EffectBorn(Vector3 position) {
 	}
 }
 
-#pragma endregion
+// パーティクル発生
+void Game::ParticleBorn(KamataEngine::Vector3 position) {
+
+	modelParticle_ = KamataEngine::Model::CreateSphere(4, 4);
+
+	for (int i = 0; i < 150; i++) {
+		particle_ = new Particle();
+		KamataEngine::Vector3 P_position = {0.0f * i, 0.0f, 0.0f};
+		KamataEngine::Vector3 P_velocity = {distribution(randomEngine), distribution(randomEngine), 0};
+		P_position = position;
+		Normalize(P_velocity);
+		P_velocity *= distribution(randomEngine);
+		P_velocity *= 0.1f;
+
+		particle_->Initialize(modelParticle_, P_position, P_velocity);
+		// リストに追加
+		particles_.push_back(particle_);
+	}
+}
 
 Game::~Game() {
 	delete debugCamera_;
@@ -215,14 +228,15 @@ Game::~Game() {
 	//delete modelEffect_;
 #pragma endregion
 
-	// パーティクルの解放
+#pragma region パーティクルの解放
 	delete modelParticle_;
-//	delete particle_;
+	//delete particle_;
 
 	for (Particle* particle : particles_) {
 		delete particle;
 	}
 	particles_.clear();
+#pragma endregion
 
 	Model2::StaticFinalize();
 }
