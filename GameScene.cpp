@@ -144,10 +144,12 @@ void Game::Draw() {
 		OFF_Effect = (ON_Effect == false);
 	}
 	if (ON_Effect) {
+		/*
 		// エフェクト描画
-		for (Effect* effect : effects_) {
-			effect->Draw(camera_);
-		}
+		for (Effect* effect : effects_)
+		{
+		    effect->Draw(camera_);
+		}*/
 	}
 
 #pragma endregion
@@ -220,16 +222,16 @@ Game::~Game() {
 	delete model2_;
 
 #pragma region エフェクトの解放
-	//// エフェクト
-	//for (Effect* effect : effects_) {
-	//	delete effect;
+	// エフェクト
+//	for (Effect* effect : effects_) {
+		//delete effect;
 	//}
-	//effects_.clear();
-	//delete modelEffect_;
+//	effects_.clear();
+//	delete modelEffect_;
 #pragma endregion
 
 #pragma region パーティクルの解放
-	delete modelParticle_;
+	//delete modelParticle_;
 	//delete particle_;
 
 	for (Particle* particle : particles_) {

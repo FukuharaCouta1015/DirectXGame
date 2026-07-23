@@ -1,8 +1,6 @@
 #pragma once
 #include "KamataEngine.h"
 
-using namespace KamataEngine;
-
 class Particle {
 public:
 	void Initialize(KamataEngine::Model* model, KamataEngine::Vector3 position, KamataEngine::Vector3 velocity);
@@ -18,7 +16,7 @@ public:
 	bool isFinished() { return isFinished_; }
 
 private:
-	WorldTransform worldTransform_;
+	KamataEngine::WorldTransform worldTransform_;
 	KamataEngine::Model* model_ = nullptr;
 
 	uint32_t MOVE_Particle = false;

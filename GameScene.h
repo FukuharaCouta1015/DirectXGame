@@ -7,8 +7,6 @@
 
 #include "Particle.h"
 
-using namespace KamataEngine;
-
 class Game {
 public:
 	void Initialize();
