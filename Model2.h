@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <3d\LightGroup.h>

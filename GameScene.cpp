@@ -14,6 +14,38 @@ void Game::Initialize() {
 	// デバッグカメラ生成
 	debugCamera_ = new DebugCamera(1280, 720);
 
+#pragma region フェーズ・フェード
+	// フェーズインから開始
+	phase_ = Phase::kFadeIn;
+	// フェード
+	fade_ = new Fade();
+	fade_->Initialize();
+	fade_->Start(Fade::Status::FadeIn, 1.0f);
+#pragma endregion
+
+#pragma region UI
+
+	// ESCのスプライト
+	ESC_Handle_ = TextureManager::Load("UI/ESC.png");
+	ESC_Sprite_ = KamataEngine::Sprite::Create(ESC_Handle_, {10, 100});
+
+	ESC_Handle_2 = TextureManager::Load("UI/Pushed_ESC.png");
+	ESC_Sprite_2 = KamataEngine::Sprite::Create(ESC_Handle_2, {10, 100});
+
+	PoseUI_Handle_ = TextureManager::Load("UI/Pose_UI.png");
+	PoseUI_Sprite_ = KamataEngine::Sprite::Create(PoseUI_Handle_, {448, 164});
+
+	PoseUI_Handle_2 = TextureManager::Load("UI/Pushed_Pose_UI.png");
+	PoseUI_Sprite_2 = KamataEngine::Sprite::Create(PoseUI_Handle_2, {448, 164});
+
+	PoseUI2_Handle_ = TextureManager::Load("UI/Pose_UI_2.png");
+	PoseUI2_Sprite_ = KamataEngine::Sprite::Create(PoseUI2_Handle_, {448, 364});
+
+	PoseUI2_Handle_2 = TextureManager::Load("UI/Pushed_Pose_UI_2.png");
+	PoseUI2_Sprite_2 = KamataEngine::Sprite::Create(PoseUI2_Handle_2, {448, 364});
+
+#pragma endregion
+
 #pragma region 四角形_リング
 	// model_ = Model::Create();
 
@@ -49,10 +81,12 @@ void Game::Initialize() {
 	srand((unsigned)time(NULL));
 
 #pragma endregion
+	// 効果音ラボ/生活[3]スポーツ・その他/おなら
+	// f_h = Audio::GetInstance()->LoadWave("Sounds/sound/Fart.mp3");
 
 #pragma region テクスチャ
 
-	// textureHandle_ = TextureManager::Load("uvChecker.png");
+	textureHandle_ = TextureManager::Load("uvChecker.png");
 	// textureHandle_ = TextureManager::Load("white1x1.png");
 
 #pragma endregion
@@ -84,52 +118,141 @@ void Game::Update() {
 	}
 #pragma endregion
 
+	switch (phase_) {
+	case Phase::kPlay: {
+
+#pragma region 仮設コード
+
+		/**/
+		// ゲームクリア(仮)
+		if (Input::GetInstance()->TriggerKey(DIK_C)) {
+			phase_ = Phase::kEnemyDeath;
+		}
+		// ゲームオーバー(仮)
+		if (Input::GetInstance()->TriggerKey(DIK_O)) {
+			phase_ = Phase::kDeath;
+		}
+
+#pragma endregion
+
+		if (gameActive) {
+
 #pragma region エフェクト
 
-	// エフェクト発生
-	if (rand() % 5 == 0) {
-		Vector3 position = {distribution(randomEngine), distribution(randomEngine), 0};
-		position *= 10;
-		EffectBorn(position);
-	}
+			// エフェクト発生
+			if (rand() % 5 == 0) {
+				Vector3 position = {distribution(randomEngine), distribution(randomEngine), 0};
+				position *= 10;
+				EffectBorn(position);
+			}
 
-	// エフェクト更新
-	// effect_->Update();
-	for (Effect* effect : effects_) {
-		effect->Update();
-	}
+			// エフェクト更新
+			// effect_->Update();
+			for (Effect* effect : effects_) {
+				effect->Update();
+			}
 
-	// デスフラグの立ったエフェクトを削除
-	effects_.remove_if([](Effect* effect) {
-		if (effect->IsFinished()) {
-			delete effect;
-			return true;
-		}
-		return false;
-	});
+			// デスフラグの立ったエフェクトを削除
+			effects_.remove_if([](Effect* effect) {
+				if (effect->IsFinished()) {
+					delete effect;
+					return true;
+				}
+				return false;
+			});
 
 #pragma endregion
 
 #pragma region パーティクル
 
-	if (rand() % 20 == 0) {
-		KamataEngine::Vector3 P_position = {distribution(randomEngine) * 30.0f, distribution(randomEngine) * 20.0f, 0};
-		ParticleBorn(P_position);
-	}
+			if (rand() % 20 == 0) {
+				KamataEngine::Vector3 P_position = {distribution(randomEngine) * 30.0f, distribution(randomEngine) * 20.0f, 0};
+				ParticleBorn(P_position);
+			}
 
-	for (Particle* particle : particles_) {
-		particle->Update();
-	}
+			for (Particle* particle : particles_) {
+				particle->Update();
+			}
 
-	particles_.remove_if([](Particle* particle_) {
-		if (particle_->isFinished()) {
-			delete particle_;
-			return true;
-		}
-		return false;
-	});
+			particles_.remove_if([](Particle* particle_) {
+				if (particle_->isFinished()) {
+					delete particle_;
+					return true;
+				}
+				return false;
+			});
 
 #pragma endregion
+		}
+
+		if (Input::GetInstance()->TriggerKey(DIK_ESCAPE)) {
+			phase_ = Phase::kPose;
+		}
+
+		break;
+	}
+
+	case Phase::kPose: {
+
+		gameActive = false;
+		if (Input::GetInstance()->TriggerKey(DIK_ESCAPE)) {
+			phase_ = Phase::kPlay;
+			gameActive = true;
+		}
+		if (Input::GetInstance()->TriggerKey(DIK_T)) {
+			phase_ = Phase::kFadeOut3;
+		}
+		break;
+	}
+
+	case Phase::kDeath: {
+		// フェードアウト開始
+		phase_ = Phase::kFadeOut;
+		fade_->Start(Fade::Status::FadeOut, 1.0f);
+
+		break;
+	}
+
+	case Phase::kEnemyDeath: {
+		// フェードアウト開始
+		phase_ = Phase::kFadeOut2;
+		fade_->Start(Fade::Status::FadeOut, 1.0f);
+
+		break;
+	}
+	case Phase::kFadeIn: {
+		// フェード
+		fade_->Update();
+		if (fade_->IsFinished()) {
+			phase_ = Phase::kPlay;
+		}
+		break;
+	}
+	case Phase::kFadeOut: {
+		// フェード
+		fade_->Update();
+		if (fade_->IsFinished()) {
+			finishedGAME_ = true;
+		}
+		break;
+	}
+	case Phase::kFadeOut2: {
+		// フェード
+		fade_->Update();
+		if (fade_->IsFinished()) {
+			finishedGAME2_ = true;
+		}
+		break;
+	}
+	case Phase::kFadeOut3: {
+		// フェード
+		fade_->Update();
+		if (fade_->IsFinished()) {
+			finishedGAME3_ = true;
+		}
+		break;
+	}
+	}
 }
 
 void Game::Draw() {
@@ -181,6 +304,35 @@ void Game::Draw() {
 	// model2_ring_->Draw(worldTransform_, camera_, textureHandle_);
 
 	Model2::PostDraw();
+
+	Sprite::PreDraw();
+
+#pragma region UI
+	if (phase_ == Phase::kPlay || phase_ == Phase::kFadeIn || phase_ == Phase::kPose || phase_ == Phase::kDeath || phase_ == Phase::kEnemyDeath) {
+		ESC_Sprite_->Draw();
+
+		if (Input::GetInstance()->PushKey(DIK_ESCAPE)) {
+			ESC_Sprite_2->Draw();
+		}
+	}
+
+	// ポーズ画面
+	if (phase_ == Phase::kPose) {
+		PoseUI_Sprite_->Draw();
+		PoseUI2_Sprite_->Draw();
+
+		if (Input::GetInstance()->PushKey(DIK_ESCAPE)) {
+			PoseUI_Sprite_2->Draw();
+		}
+
+		if (Input::GetInstance()->PushKey(DIK_T)) {
+			PoseUI2_Sprite_2->Draw();
+		}
+	}
+
+#pragma endregion
+
+	Sprite::PostDraw();
 }
 
 // エフェクト発生
@@ -223,21 +375,33 @@ Game::~Game() {
 
 #pragma region エフェクトの解放
 	// エフェクト
-//	for (Effect* effect : effects_) {
-		//delete effect;
-	//}
-//	effects_.clear();
-//	delete modelEffect_;
+	for (Effect* effect : effects_) {
+		delete effect;
+	}
+	effects_.clear();
+	delete modelEffect_;
 #pragma endregion
 
 #pragma region パーティクルの解放
-	//delete modelParticle_;
-	//delete particle_;
+	delete modelParticle_;
 
 	for (Particle* particle : particles_) {
 		delete particle;
 	}
 	particles_.clear();
+#pragma endregion
+
+#pragma region UI
+
+	delete ESC_Sprite_;
+	delete ESC_Sprite_2;
+
+	delete PoseUI_Sprite_;
+	delete PoseUI_Sprite_2;
+
+	delete PoseUI2_Sprite_;
+	delete PoseUI2_Sprite_2;
+
 #pragma endregion
 
 	Model2::StaticFinalize();

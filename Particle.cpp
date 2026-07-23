@@ -21,7 +21,7 @@ void Particle::Initialize(KamataEngine::Model* model, KamataEngine::Vector3 posi
 	// 色の設定
 	objectColor_.Initialize();
 	color_ = {1, 1, 0, 1};
-	// color_ = {0.352f, 0.060f, 0.014f, 1.0f};
+	// color_ = {0.111f, 0.019f, 0.000f, 1.0f};
 }
 
 void Particle::Update() {
