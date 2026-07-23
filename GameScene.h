@@ -1,12 +1,15 @@
 #pragma once
-#include "Effect.h"
 #include "KamataEngine.h"
-#include "Model2.h"
 
 #include "Fade.h"
 #include <list>
 
+#include "Model2.h"
+
+#include "Effect.h"
 #include "Particle.h"
+
+#include "Stage.h"
 
 class Game {
 public:
@@ -14,6 +17,8 @@ public:
 	void Update();
 	void Draw();
 	~Game();
+
+#pragma region ゲームの状態管理
 
 	bool gameActive = true;
 
@@ -30,9 +35,9 @@ public:
 	bool finishedGAME3_ = false;
 	bool IsFinishedGAME3() const { return finishedGAME3_; } ////ゲームクリア
 
-	uint32_t textureHandle_Circle_ = 0;
+#pragma endregion
 
-	// 3Dモデルデータ
+#pragma region 3Dモデルデータ
 
 	// KamataEngine::Model* model_ = nullptr;
 
@@ -44,12 +49,15 @@ public:
 
 	KamataEngine::Model2* model2_ring_ = nullptr;
 
+#pragma endregion
+
 	// エフェクト生成
 	void EffectBorn(KamataEngine::Vector3 position);
 
 	// パーティクル
 	Particle* particle_ = nullptr;
 	void ParticleBorn(KamataEngine::Vector3 position);
+	uint32_t textureHandle_Circle_ = 0;
 
 	// デバッグカメラ
 	bool isDebugCameraActive_ = false;
@@ -84,8 +92,6 @@ private:
 	uint32_t ON_Particle = false;
 
 #pragma endregion
-	// uint32_t f_h = 0;
-	// uint32_t f_v = 0;
 
 #pragma region ポーズ画面
 
@@ -111,6 +117,11 @@ private:
 	KamataEngine::Sprite* PoseUI2_Sprite_2 = nullptr;
 
 #pragma endregion
+
+	// テクスチャハンドル
+	uint32_t textureHandleStage_ = 0;
+	// クラス
+	Stage* stage_ = nullptr;
 
 #pragma region フェーズ・フェード
 

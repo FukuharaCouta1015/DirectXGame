@@ -23,11 +23,18 @@ void Game::Initialize() {
 	fade_->Start(Fade::Status::FadeIn, 1.0f);
 #pragma endregion
 
+#pragma region 背景スクロール
+	// ファイル名を指定してテクスチャを読み込む
+	textureHandleStage_ = TextureManager::Load("Scenes/stage.png");
+	stage_ = new Stage();
+	stage_->Initialize(textureHandleStage_);
+#pragma endregion
+
 #pragma region UI
 
-	// ESCのスプライト
-	ESC_Handle_ = TextureManager::Load("UI/ESC.png");
-	ESC_Sprite_ = KamataEngine::Sprite::Create(ESC_Handle_, {10, 100});
+	//// ESCのスプライト
+	//ESC_Handle_ = TextureManager::Load("UI/ESC.png");
+	//ESC_Sprite_ = KamataEngine::Sprite::Create(ESC_Handle_, {10, 100});
 
 	ESC_Handle_2 = TextureManager::Load("UI/Pushed_ESC.png");
 	ESC_Sprite_2 = KamataEngine::Sprite::Create(ESC_Handle_2, {10, 100});
@@ -136,6 +143,7 @@ void Game::Update() {
 #pragma endregion
 
 		if (gameActive) {
+			stage_->Update();
 
 #pragma region エフェクト
 
@@ -284,10 +292,11 @@ void Game::Draw() {
 	}
 	if (ON_Particle) {
 	}
-
-	for (Particle* particle : particles_) {
-		particle->Draw(camera_);
-	}
+	/*
+	for (Particle* particle : particles_)
+	{
+	    particle->Draw(camera_);
+	}*/
 
 #pragma endregion
 
@@ -307,14 +316,16 @@ void Game::Draw() {
 
 	Sprite::PreDraw();
 
-#pragma region UI
-	if (phase_ == Phase::kPlay || phase_ == Phase::kFadeIn || phase_ == Phase::kPose || phase_ == Phase::kDeath || phase_ == Phase::kEnemyDeath) {
-		ESC_Sprite_->Draw();
+	stage_->Draw();
 
-		if (Input::GetInstance()->PushKey(DIK_ESCAPE)) {
-			ESC_Sprite_2->Draw();
-		}
-	}
+#pragma region UI
+	//if (phase_ == Phase::kPlay || phase_ == Phase::kFadeIn || phase_ == Phase::kPose || phase_ == Phase::kDeath || phase_ == Phase::kEnemyDeath) {
+	//	ESC_Sprite_->Draw();
+
+	//	if (Input::GetInstance()->PushKey(DIK_ESCAPE)) {
+	//		ESC_Sprite_2->Draw();
+	//	}
+	//}
 
 	// ポーズ画面
 	if (phase_ == Phase::kPose) {
@@ -403,6 +414,8 @@ Game::~Game() {
 	delete PoseUI2_Sprite_2;
 
 #pragma endregion
+
+	delete stage_;
 
 	Model2::StaticFinalize();
 }
