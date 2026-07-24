@@ -11,6 +11,7 @@
 
 #include "Stage.h"
 
+#include "GraphBar.h"
 #include "Player.h"
 
 class Game {
@@ -155,8 +156,10 @@ private:
 	// 3Dモデル
 	KamataEngine::Model* modelPlayer_ = nullptr;
 
+	GraphBar* graphBar_ = nullptr;
+	uint32_t textureHandleGraph_ = 0;
 	// HP
-	// int hp_ = 200;
+	int hp_ = 200;
 
 #pragma endregion
 };
