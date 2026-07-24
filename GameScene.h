@@ -11,6 +11,8 @@
 
 #include "Stage.h"
 
+#include "Player.h"
+
 class Game {
 public:
 	void Initialize();
@@ -145,5 +147,16 @@ private:
 
 	// フェード
 	Fade* fade_ = nullptr;
+#pragma endregion
+
+#pragma region プレイヤー
+
+	Player* player_ = nullptr;
+	// 3Dモデル
+	KamataEngine::Model* modelPlayer_ = nullptr;
+
+	// HP
+	// int hp_ = 200;
+
 #pragma endregion
 };
