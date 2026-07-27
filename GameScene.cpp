@@ -1,7 +1,7 @@
 #include "GameScene.h"
-#include <cstdlib>
-#include <ctime>
 #include <random>
+#include <ctime>
+#include <cstdlib>
 
 using namespace KamataEngine;
 using namespace MathUtility;
@@ -40,6 +40,12 @@ void Game::Initialize() {
 	graphBar_ = new GraphBar();
 	graphBar_->Initialize(textureHandleGraph_);
 
+#pragma endregion
+
+#pragma region スコア表示
+	textureHandleNumber_ = TextureManager::Load("UI/number.png");
+	drawNumber_ = new DrawNumber();
+	drawNumber_->Initialize(textureHandleNumber_);
 #pragma endregion
 
 #pragma region UI
@@ -146,6 +152,9 @@ void Game::Update() {
 		if (hp_ < 0) {
 			hp_ = 200u;
 		}
+
+		gameScore_++;
+		drawNumber_->Update(gameScore_);
 
 #pragma region エフェクト
 
@@ -287,39 +296,20 @@ void Game::Draw() {
 	// DirectXCommonインスタンスの取得
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
+#pragma region スプライト(背景)
+
 	Sprite::PreDraw(dxCommon->GetCommandList());
 
 	stage_->Draw();
-
-#pragma region UI
-	if (phase_ == Phase::kPlay || phase_ == Phase::kFadeIn || phase_ == Phase::kPose || phase_ == Phase::kDeath || phase_ == Phase::kEnemyDeath) {
-		ESC_Sprite_->Draw();
-
-		if (Input::GetInstance()->PushKey(DIK_ESCAPE)) {
-			ESC_Sprite_2->Draw();
-		}
-	}
-
-	// ポーズ画面
-	if (phase_ == Phase::kPose) {
-		PoseUI_Sprite_->Draw();
-		PoseUI2_Sprite_->Draw();
-
-		if (Input::GetInstance()->PushKey(DIK_ESCAPE)) {
-			PoseUI_Sprite_2->Draw();
-		}
-
-		if (Input::GetInstance()->PushKey(DIK_T)) {
-			PoseUI2_Sprite_2->Draw();
-		}
-	}
-
-#pragma endregion
 
 	Sprite::PostDraw();
 
 	// 深度バッファクリア
 	dxCommon->ClearDepthBuffer();
+
+#pragma endregion
+
+#pragma region モデル
 
 	Model::PreDraw();
 
@@ -360,6 +350,9 @@ void Game::Draw() {
 
 	Model::PostDraw();
 
+#pragma endregion
+
+#pragma region モデル2
 	Model2::PreDraw(commandList);
 
 	// model2_->Draw(worldTransform_, camera_, textureHandle_Circle_);
@@ -371,15 +364,45 @@ void Game::Draw() {
 	// model2_ring_->Draw(worldTransform_, camera_, textureHandle_);
 
 	Model2::PostDraw();
+#pragma endregion
+
+#pragma region スプライト(UI)
 
 	// スプライト描画前処理
 	Sprite::PreDraw(dxCommon->GetCommandList());
 
 	graphBar_->Draw();
-	// drawNumber_->Draw();
+	drawNumber_->Draw();
+
+#pragma region UI
+	if (phase_ == Phase::kPlay || phase_ == Phase::kFadeIn || phase_ == Phase::kPose || phase_ == Phase::kDeath || phase_ == Phase::kEnemyDeath) {
+		ESC_Sprite_->Draw();
+
+		if (Input::GetInstance()->PushKey(DIK_ESCAPE)) {
+			ESC_Sprite_2->Draw();
+		}
+	}
+
+	// ポーズ画面
+	if (phase_ == Phase::kPose) {
+		PoseUI_Sprite_->Draw();
+		PoseUI2_Sprite_->Draw();
+
+		if (Input::GetInstance()->PushKey(DIK_ESCAPE)) {
+			PoseUI_Sprite_2->Draw();
+		}
+
+		if (Input::GetInstance()->PushKey(DIK_T)) {
+			PoseUI2_Sprite_2->Draw();
+		}
+	}
+
+#pragma endregion
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
+
+#pragma endregion
 }
 
 // エフェクト発生
@@ -455,6 +478,8 @@ Game::~Game() {
 
 	delete player_;
 	delete graphBar_;
+
+	delete drawNumber_;
 
 	Model2::StaticFinalize();
 }
