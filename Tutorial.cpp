@@ -66,6 +66,7 @@ void Tutorial::Initialize() {
 
 	// チュートリアルのスプライト
 	t_Handle_ = TextureManager::Load("cube/cube.jpg");
+	
 	tutorialSprite_ = KamataEngine::Sprite::Create(t_Handle_, tutorialPos_);
 
 	tutorialSprite_->SetSize({1280, 720});
