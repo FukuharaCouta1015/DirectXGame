@@ -11,8 +11,8 @@ GraphBar::~GraphBar() {
 void GraphBar::Initialize(uint32_t textureHandle) {
 	textureHandle_ = textureHandle;
 	// スプライト
-	sprite_ = Sprite::Create(textureHandle_, {400, 200});
-	sprite2_ = Sprite::Create(textureHandle_, {400, 200});
+	sprite_ = Sprite::Create(textureHandle_, {200, 20});
+	sprite2_ = Sprite::Create(textureHandle_, {200, 20});
 }
 
 // 更新

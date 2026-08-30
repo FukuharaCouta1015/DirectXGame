@@ -13,7 +13,7 @@ void Bullet::Initialize(Model* model, const Vector3& position) {
 	worldTransform_.translation_ = position;
 
 	// 弾を小さくする
-	worldTransform_.scale_ = {0.3f, 0.3f, 0.3f};
+	worldTransform_.scale_ = {0.6f, 0.6f, 0.6f};
 
 	worldTransform_.UpdateMatrix();
 }

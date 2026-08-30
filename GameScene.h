@@ -13,6 +13,7 @@
 
 #include "GraphBar.h"
 #include "Player.h"
+#include "Enemy.h"
 
 #include "DrawNumber.h"
 
@@ -151,17 +152,37 @@ private:
 	// フェード
 	Fade* fade_ = nullptr;
 #pragma endregion
-
 #pragma region プレイヤー
 
 	Player* player_ = nullptr;
-	// 3Dモデル
+
+	// プレイヤー3Dモデル
 	KamataEngine::Model* modelPlayer_ = nullptr;
+
+	// 弾3Dモデル
+	KamataEngine::Model* modelBullet_ = nullptr;
 
 	GraphBar* graphBar_ = nullptr;
 	uint32_t textureHandleGraph_ = 0;
+
 	// HP
 	int hp_ = 200;
+
+#pragma endregion
+
+#pragma region 敵
+
+	// 敵
+	std::list<Enemy*> enemies_;
+
+	// 敵モデル
+	KamataEngine::Model* modelEnemy_ = nullptr;
+
+	// 敵生成タイマー
+	int enemySpawnTimer_ = 0;
+
+	// 敵生成間隔
+	static const int kEnemySpawnInterval = 120;
 
 #pragma endregion
 

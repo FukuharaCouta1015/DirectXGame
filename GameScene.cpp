@@ -30,11 +30,20 @@ void Game::Initialize() {
 	stage_->Initialize(textureHandleStage_);
 #pragma endregion
 
-#pragma region プレイヤー
+#pragma region モデル
 
+	// プレイヤーモデル
 	modelPlayer_ = Model::CreateFromOBJ("player");
+
+	// 弾モデル
+	modelBullet_ = Model::CreateFromOBJ("bullet");
+
+	// 敵モデル
+	modelEnemy_ = Model::CreateFromOBJ("enemy");
+
 	player_ = new Player();
 	player_->Initialize(modelPlayer_);
+	player_->SetBulletModel(modelBullet_);
 
 	textureHandleGraph_ = TextureManager::Load("white1x1.png");
 	graphBar_ = new GraphBar();
@@ -147,6 +156,38 @@ void Game::Update() {
 		stage_->Update();
 
 		player_->Update();
+
+		
+		// =========================
+		// 敵生成
+		// =========================
+
+		enemySpawnTimer_++;
+
+		for (Enemy* enemy : enemies_) {
+			enemy->Update();
+			// 弾と敵の当たり判定
+			if (player_->CheckBulletCollision(enemy->GetPosition())) {
+
+				// 敵を倒す
+				enemy->SetDead();
+			}
+		}
+
+		// =========================
+		// 死んだ敵を削除
+		// =========================
+
+		enemies_.remove_if([](Enemy* enemy) {
+			if (enemy->IsDead()) {
+
+				delete enemy;
+				return true;
+			}
+
+			return false;
+		});
+
 		graphBar_->Update(hp_);
 		hp_--;
 		if (hp_ < 0) {
@@ -155,6 +196,29 @@ void Game::Update() {
 
 		gameScore_++;
 		drawNumber_->Update(gameScore_);
+
+
+		if (enemySpawnTimer_ >= kEnemySpawnInterval) {
+
+			enemySpawnTimer_ = 0;
+
+			// 右端
+			float enemyX = 40.0f;
+
+			// Y座標をランダムにする
+			float enemyY = distribution(randomEngine) * 7.0f;
+
+			// 敵の位置
+			Vector3 position = {enemyX, enemyY, 0.0f};
+
+			// 敵生成
+			Enemy* enemy = new Enemy();
+
+			enemy->Initialize(modelEnemy_, position);
+
+			// リストに追加
+			enemies_.push_back(enemy);
+		}
 
 #pragma region エフェクト
 
@@ -315,6 +379,11 @@ void Game::Draw() {
 
 	// ここに3Dモデルインスタンスの描画処理を記述する
 	player_->Draw(camera_);
+
+	// 敵描画
+	for (Enemy* enemy : enemies_) {
+		enemy->Draw(camera_);
+	}
 
 #pragma region エフェクト描画
 

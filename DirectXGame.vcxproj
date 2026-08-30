@@ -167,6 +167,7 @@
     <ClCompile Include="Clear.cpp" />
     <ClCompile Include="DrawNumber.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GraphBar.cpp" />
@@ -283,6 +284,7 @@
     <ClInclude Include="Clear.h" />
     <ClInclude Include="DrawNumber.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Fade.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Model2.h" />
